@@ -8,7 +8,7 @@
 
 Click on the nevigantion menu icon on the top left of the console.
 
-Select APIs & services > Enable APIs and services, and ```click on + Enable APIs and services.```
+Select APIs & services > Enable APIs and services, and ***click on + Enable APIs and services.***
 
 Search for Vertex AI API, click on the first entry and then click on Enable, if it is not already enabled.
 
