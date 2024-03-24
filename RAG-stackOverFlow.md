@@ -32,7 +32,7 @@ On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new pyt
 
 - [x] 3.1 In the first cell, run the following command to install the Google Cloud Vertex AI, Cloud Storage and BigQuery SDKs. To run the command, execute SHIFT+ENTER
 
-```python
+```shell
 ! pip3 install --upgrade google-cloud-aiplatform \
                         google-cloud-storage \
                         'google-cloud-bigquery[pandas]'
