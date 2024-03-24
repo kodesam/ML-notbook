@@ -6,15 +6,15 @@
 ### Task 1. Enable Vertex AI APIs
 ```
 
-Click on the nevigantion menu icon on the top left of the console.
+1.1 Click on the nevigantion menu icon on the top left of the console.
 
-Select APIs & services > Enable APIs and services, and ***click on + Enable APIs and services.***
+1.2 Select APIs & services > Enable APIs and services, and click on + Enable APIs and services.
 
-Search for Vertex AI API, click on the first entry and then click on Enable, if it is not already enabled.
+1.3 Search for Vertex AI API, click on the first entry and then click on Enable, if it is not already enabled.
 
 ```
 
-```Task 2. Open a Jupyter notebook in Vertex AI Workbench```
+### Task 2. Open a Jupyter notebook in Vertex AI Workbench
 
 ```
 In your Google Cloud project, navigate to Vertex AI Workbench. In the top search bar of the Google Cloud console, enter Vertex AI Workbench, and click on the first result.
