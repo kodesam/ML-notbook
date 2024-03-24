@@ -1,3 +1,5 @@
+
+
 ***
 #  Using Vertex AI Vector Search and Vertex AI Embeddings for Text for StackOverflow Questions 
 ***
@@ -38,7 +40,7 @@ On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new pyt
 
 3.2 Restart kernel after installs so that your environment can access the new packages
 
-```ipynb
+```python
 import IPython
 
 app = IPython.Application.instance()
@@ -46,14 +48,14 @@ app.kernel.do_shutdown(True)
 ```
 3.3 Setup the environment values for your project.
 
-```
+```python
 PROJECT = !gcloud config get-value project
 PROJECT_ID = PROJECT[0]
 REGION = "us-west1"
 ```
 3.4 Import and initialize the Vertex AI Python SDK.
 
-```
+```python
 import vertexai
 vertexai.init(project = PROJECT_ID,
               location = REGION)
@@ -63,7 +65,7 @@ vertexai.init(project = PROJECT_ID,
 
 4.1 Import the libraries and initialize the BigQuery client.
 
-```
+```python
 import math
 from typing import Any, Generator
 
@@ -74,7 +76,7 @@ client = bigquery.Client(project=PROJECT_ID)
 ```
 4.2 Define the BigQuery query for the remote dataset.
 
-```
+```python
 QUERY_TEMPLATE = """
         SELECT distinct q.id, q.title, q.body
         FROM (SELECT * FROM `bigquery-public-data.stackoverflow.posts_questions` where Score>0 ORDER BY View_Count desc) AS q
@@ -85,7 +87,7 @@ QUERY_TEMPLATE = """
 
 4.3 Create a function to access the BigQuery data in chunks.
 
-```
+```python
 def query_bigquery_chunks(
     max_rows: int, rows_per_chunk: int, start_chunk: int = 0
 ) -> Generator[pd.DataFrame, Any, None]:
@@ -101,7 +103,7 @@ def query_bigquery_chunks(
 
 4.4 Get a dataframe of 1000 rows for demonstration purposes.
 
-```
+```python
 df = next(query_bigquery_chunks(max_rows=1000, rows_per_chunk=1000))
 
 # Examine the data
