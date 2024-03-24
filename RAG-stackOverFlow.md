@@ -15,7 +15,7 @@
 
 ### Task 2. Open a Jupyter notebook in Vertex AI Workbench
 
-```
+
 2.1 In your Google Cloud project, navigate to Vertex AI Workbench. In the top search bar of the Google Cloud console, enter Vertex AI Workbench, and click on the first result. Use search to locate Vertex AI workbench
 If you see a button at the top of the screen with the title Enable Notebooks API, click on it to enable the API.
 
@@ -26,9 +26,9 @@ The JupyterLab will run in a new tab.
 2.3 Open Notebook action
 On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new python notebook.
 
-```
 
-```Task 3. Set up the Jupyter notebook environment```
+
+### Task 3. Set up the Jupyter notebook environment```
 
 In the first cell, run the following command to install the Google Cloud Vertex AI, Cloud Storage and BigQuery SDKs. To run the command, execute SHIFT+ENTER
 
