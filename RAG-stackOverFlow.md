@@ -1,8 +1,9 @@
+***
 #  Using Vertex AI Vector Search and Vertex AI Embeddings for Text for StackOverflow Questions 
 ***
 ## Setup and requirements
 
-## Task 1. Enable Vertex AI APIs
+### Task 1. Enable Vertex AI APIs
 ```
 
 Click on the nevigantion menu icon on the top left of the console.
