@@ -38,7 +38,7 @@ On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new pyt
 
 3.2 Restart kernel after installs so that your environment can access the new packages
 
-```
+```ipynb
 import IPython
 
 app = IPython.Application.instance()
