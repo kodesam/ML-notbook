@@ -3,6 +3,7 @@
 
 ### Setup and requirements
 ```Task 1. Enable Vertex AI APIs```
+
 ```Task 2. Open a Jupyter notebook in Vertex AI Workbench```
 ```Task 3. Set up the Jupyter notebook environment```
 ```Task 4. Prepare the data in BigQuery```
