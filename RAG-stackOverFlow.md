@@ -312,25 +312,25 @@ for i, df in tqdm(
 
 ```
 
-```Task 6. Upload embeddings to Cloud Storage```
+### Task 6. Upload embeddings to Cloud Storage
 
-Upload the text-embeddings to Cloud Storage, so that Vertex AI Vector Search can access them later.
+ Upload the text-embeddings to Cloud Storage, so that Vertex AI Vector Search can access them later.
 
-Define a bucket where you will store your embeddings.
+6.1 Define a bucket where you will store your embeddings.
 
 ```
 BUCKET_URI = f"gs://{PROJECT_ID}-unique"
 
 ```
 
-Create your Cloud Storage bucket.
+6.2 Create your Cloud Storage bucket.
 
 ```
 ! gsutil mb -l {REGION} -p {PROJECT_ID} {BUCKET_URI}
 
 ```
 
-Upload the training data to a Google Cloud Storage bucket.
+6.3 Upload the training data to a Google Cloud Storage bucket.
 
 ```
 remote_folder = f"{BUCKET_URI}/{embeddings_file_path.stem}/"
@@ -338,9 +338,9 @@ remote_folder = f"{BUCKET_URI}/{embeddings_file_path.stem}/"
 
 ```
 
-```Task 7. Create an Index in Vertex AI Vector Search for your embeddings```
+### Task 7. Create an Index in Vertex AI Vector Search for your embeddings
 
-Setup your index name and description.
+7.1 Setup your index name and description.
 
 ```
 DISPLAY_NAME = "stack_overflow"
@@ -348,7 +348,7 @@ DESCRIPTION = "question titles and bodies from stackoverflow"
 
 ```
 
-Create the index. Notice that the index reads the embeddings from the Cloud Storage bucket. The indexing process can take from 45 minutes up to 60 minutes. Wait for completion, and then proceed. You can open a different Google Cloud Console page, navigate to Vertex AI Vector search, and see how the index is being created.
+7.2 Create the index. Notice that the index reads the embeddings from the Cloud Storage bucket. The indexing process can take from 45 minutes up to 60 minutes. Wait for completion, and then proceed. You can open a different Google Cloud Console page, navigate to Vertex AI Vector search, and see how the index is being created.
 from google.cloud i
 
 ```
@@ -372,7 +372,7 @@ tree_ah_index = aiplatform.MatchingEngineIndex.create_tree_ah_index(
 
 ```
 
-Reference the index name to make sure it got created successfully.
+7.3 Reference the index name to make sure it got created successfully.
 
 ```
 INDEX_RESOURCE_NAME = tree_ah_index.resource_name
@@ -380,7 +380,7 @@ INDEX_RESOURCE_NAME
 
 ```
 
-Using the resource name, you can retrieve an existing MatchingEngineIndex.
+7.4 Using the resource name, you can retrieve an existing MatchingEngineIndex.
 
 ```
 
@@ -388,7 +388,7 @@ tree_ah_index = aiplatform.MatchingEngineIndex(index_name=INDEX_RESOURCE_NAME)
 
 ```
 
-Create an IndexEndpoint so that it can be accessed via an API.
+7.5 Create an IndexEndpoint so that it can be accessed via an API.
 
 ```
 
@@ -400,7 +400,7 @@ my_index_endpoint = aiplatform.MatchingEngineIndexEndpoint.create(
 
 ```
 
-Deploy your index to the created endpoint. This can take up to 15 minutes.
+7.6 Deploy your index to the created endpoint. This can take up to 15 minutes.
 
 ```
 
@@ -417,7 +417,7 @@ my_index_endpoint.deployed_indexes
 
 ```
 
-Verify number of declared items matches the number of embeddings. Each IndexEndpoint can have multiple indexes deployed to it. For each index, you can retrieve the number of deployed vectors using the index_endpoint._gca_resource.index_stats.vectors_count. The numbers may not match exactly due to potential rate-limiting failures incurred when using the embedding service.
+7.7 Verify number of declared items matches the number of embeddings. Each IndexEndpoint can have multiple indexes deployed to it. For each index, you can retrieve the number of deployed vectors using the index_endpoint._gca_resource.index_stats.vectors_count. The numbers may not match exactly due to potential rate-limiting failures incurred when using the embedding service.
 
 ```
 number_of_vectors = sum(
@@ -431,13 +431,13 @@ print(f"Expected: {BQ_NUM_ROWS}, Actual: {number_of_vectors}")
 
 ```
 
-```Task 8. Create online queries```
+### Task 8. Create online queries
 
 After you build your indexes, you may query against the deployed index to find nearest neighbors.
 
 Note: For the DOT_PRODUCT_DISTANCE distance type, the "distance" property returned with each MatchNeighbor actually refers to the similarity.
 
-Create an embedding for a test question.
+8.1 Create an embedding for a test question.
 
 ```
 
@@ -445,7 +445,7 @@ test_embeddings = encode_texts_to_embeddings(sentences=["Install GPU for Tensorf
 
 ```
 
-Test the query to retrieve the similar embeddings.
+8.2 Test the query to retrieve the similar embeddings.
 
 ```
 NUM_NEIGHBOURS = 10
@@ -460,7 +460,7 @@ response
 
 ```
 
-Verify that the retrieved results are relevant by checking the StackOverflow links.
+8.3 Verify that the retrieved results are relevant by checking the StackOverflow links.
 
 ```
 for match_index, neighbor in enumerate(response[0]):
