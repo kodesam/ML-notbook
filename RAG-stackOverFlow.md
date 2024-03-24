@@ -59,9 +59,9 @@ vertexai.init(project = PROJECT_ID,
               location = REGION)
 ```
 
-```Task 4. Prepare the data in BigQuery```
+### Task 4. Prepare the data in BigQuery
 
-Import the libraries and initialize the BigQuery client.
+4.1 Import the libraries and initialize the BigQuery client.
 
 ```
 import math
@@ -72,7 +72,7 @@ from google.cloud import bigquery
 
 client = bigquery.Client(project=PROJECT_ID)
 ```
-Define the BigQuery query for the remote dataset.
+4.2 Define the BigQuery query for the remote dataset.
 
 ```
 QUERY_TEMPLATE = """
@@ -83,7 +83,7 @@ QUERY_TEMPLATE = """
 
 ```
 
-Create a function to access the BigQuery data in chunks.
+4.3 Create a function to access the BigQuery data in chunks.
 
 ```
 def query_bigquery_chunks(
@@ -99,7 +99,7 @@ def query_bigquery_chunks(
 
 ```
 
-Get a dataframe of 1000 rows for demonstration purposes.
+4.4 Get a dataframe of 1000 rows for demonstration purposes.
 
 ```
 df = next(query_bigquery_chunks(max_rows=1000, rows_per_chunk=1000))
@@ -110,9 +110,9 @@ df.head()
 ```
 
 
-```Task 5. Create text embeddings from BigQuery data```
+### Task 5. Create text embeddings from BigQuery data
 
-Load the Vertex AI Embeddings for Text model.
+5.1  Load the Vertex AI Embeddings for Text model.
 
 ```
 from typing import List, Optional
@@ -122,7 +122,7 @@ model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
 
 ```
 
-Define an embedding method that uses the model.
+5.2  Define an embedding method that uses the model.
 
 ```
 def encode_texts_to_embeddings(sentences: List[str]) -> List[Optional[List[float]]]:
@@ -136,7 +136,7 @@ def encode_texts_to_embeddings(sentences: List[str]) -> List[Optional[List[float
 
     According to the documentation, each request can handle up to 5 text instances. So we will need to split the BigQuery question results in batches of 5 before sending to the embedding API.
 
-Create a generate_batches to split results in batches of 5 to be sent to the embeddings API.
+5.3 Create a generate_batches to split results in batches of 5 to be sent to the embeddings API.
 
 ```
 import functools
@@ -157,7 +157,7 @@ def generate_batches(
 
 ```
 
-Encapsulate the process of generating batches and calling the embeddings API in a method called encode_text_to_embedding_batched. This method also handles rate-limiting using time.sleep. For production use cases, you would want a more sophisticated rate-limiting mechanism that takes retries into account.
+5.4  Encapsulate the process of generating batches and calling the embeddings API in a method called encode_text_to_embedding_batched. This method also handles rate-limiting using time.sleep. For production use cases, you would want a more sophisticated rate-limiting mechanism that takes retries into account.
 
 ```
 def encode_text_to_embedding_batched(
@@ -194,7 +194,7 @@ def encode_text_to_embedding_batched(
 
 ```
 
-Test the encoding function by encoding a subset of data and see if the embeddings and distance metrics make sense.
+5.5 Test the encoding function by encoding a subset of data and see if the embeddings and distance metrics make sense.
 
 ```
 # Encode a subset of questions for validation
@@ -207,7 +207,7 @@ is_successful, question_embeddings = encode_text_to_embedding_batched(
 questions = np.array(questions)[is_successful]
 ```
 
-Save the dimension size for later usage when creating the Vertex AI Vector Search index.
+5.6 Save the dimension size for later usage when creating the Vertex AI Vector Search index.
 
 ```
 DIMENSIONS = len(question_embeddings[0])
@@ -216,7 +216,7 @@ print(DIMENSIONS)
 
 ```
 
-Sort questions in order of similarity. According to the embedding documentation, the similarity of embeddings is calculated using the dot-product, with np.dot. Once you have the similarity score, sort the results and print them for inspection. 1 means very similar, 0 means very different.
+5.7 Sort questions in order of similarity. According to the embedding documentation, the similarity of embeddings is calculated using the dot-product, with np.dot. Once you have the similarity score, sort the results and print them for inspection. 1 means very similar, 0 means very different.
 
 ```
 
@@ -237,7 +237,7 @@ for index, (question, score) in enumerate(
 
 ```
 
-Save the embeddings in JSONL format. The data must be formatted in JSONL format, which means each embedding dictionary is written as an individual JSON object on its own line.
+5.8 Save the embeddings in JSONL format. The data must be formatted in JSONL format, which means each embedding dictionary is written as an individual JSON object on its own line.
 
 ```
 import tempfile
@@ -250,7 +250,7 @@ print(f"Embeddings directory: {embeddings_file_path}")
 
 ```
 
-Write embeddings in batches to prevent out-of-memory errors. Notice we are only using 5000 questions so that the embedding creation process and indexing is faster. The dataset contains more than 50,000 questions. This step will take around 5 minutes.
+5.9 Write embeddings in batches to prevent out-of-memory errors. Notice we are only using 5000 questions so that the embedding creation process and indexing is faster. The dataset contains more than 50,000 questions. This step will take around 5 minutes.
 
 ```
 
