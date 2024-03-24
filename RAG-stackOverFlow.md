@@ -17,15 +17,14 @@
 ### Task 2. Open a Jupyter notebook in Vertex AI Workbench
 
 ```
-In your Google Cloud project, navigate to Vertex AI Workbench. In the top search bar of the Google Cloud console, enter Vertex AI Workbench, and click on the first result.
-Use search to locate Vertex AI workbench
+2.1 In your Google Cloud project, navigate to Vertex AI Workbench. In the top search bar of the Google Cloud console, enter Vertex AI Workbench, and click on the first result. Use search to locate Vertex AI workbench
 If you see a button at the top of the screen with the title Enable Notebooks API, click on it to enable the API.
 
-Click on User managed notebooks and then click on Open JupyterLab for generative-ai-jupyterlab notebook.
+2.2 Click on User managed notebooks and then click on Open JupyterLab for generative-ai-jupyterlab notebook.
 
 The JupyterLab will run in a new tab.
 
-Open Notebook action
+2.3 Open Notebook action
 On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new python notebook.
 
 ```
