@@ -9,9 +9,9 @@
 
 - [x] 1.1 Click on the nevigantion menu icon on the top left of the console.
 
-1.2 Select APIs & services > Enable APIs and services, and click on + Enable APIs and services.
+- [x] 1.2 Select APIs & services > Enable APIs and services, and click on + Enable APIs and services.
 
-1.3 Search for Vertex AI API, click on the first entry and then click on Enable, if it is not already enabled.
+- [x] 1.3 Search for Vertex AI API, click on the first entry and then click on Enable, if it is not already enabled.
 
 
 ### Task 2. Open a Jupyter notebook in Vertex AI Workbench
