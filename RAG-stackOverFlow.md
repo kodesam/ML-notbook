@@ -116,7 +116,7 @@ df.head()
 
 5.1  Load the Vertex AI Embeddings for Text model.
 
-```
+```python
 from typing import List, Optional
 from vertexai.preview.language_models import TextEmbeddingModel
 
@@ -126,7 +126,7 @@ model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
 
 5.2  Define an embedding method that uses the model.
 
-```
+```python
 def encode_texts_to_embeddings(sentences: List[str]) -> List[Optional[List[float]]]:
     try:
         embeddings = model.get_embeddings(sentences)
@@ -140,7 +140,7 @@ def encode_texts_to_embeddings(sentences: List[str]) -> List[Optional[List[float
 
 5.3 Create a generate_batches to split results in batches of 5 to be sent to the embeddings API.
 
-```
+```python
 import functools
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -161,7 +161,7 @@ def generate_batches(
 
 5.4  Encapsulate the process of generating batches and calling the embeddings API in a method called encode_text_to_embedding_batched. This method also handles rate-limiting using time.sleep. For production use cases, you would want a more sophisticated rate-limiting mechanism that takes retries into account.
 
-```
+```python
 def encode_text_to_embedding_batched(
     sentences: List[str], api_calls_per_second: int = 10, batch_size: int = 5
 ) -> Tuple[List[bool], np.ndarray]:
@@ -198,7 +198,7 @@ def encode_text_to_embedding_batched(
 
 5.5 Test the encoding function by encoding a subset of data and see if the embeddings and distance metrics make sense.
 
-```
+```python
 # Encode a subset of questions for validation
 questions = df.title.tolist()[:500]
 is_successful, question_embeddings = encode_text_to_embedding_batched(
@@ -211,7 +211,7 @@ questions = np.array(questions)[is_successful]
 
 5.6 Save the dimension size for later usage when creating the Vertex AI Vector Search index.
 
-```
+```python
 DIMENSIONS = len(question_embeddings[0])
 
 print(DIMENSIONS)
@@ -220,7 +220,7 @@ print(DIMENSIONS)
 
 5.7 Sort questions in order of similarity. According to the embedding documentation, the similarity of embeddings is calculated using the dot-product, with np.dot. Once you have the similarity score, sort the results and print them for inspection. 1 means very similar, 0 means very different.
 
-```
+```python
 
 import random
 
@@ -241,7 +241,7 @@ for index, (question, score) in enumerate(
 
 5.8 Save the embeddings in JSONL format. The data must be formatted in JSONL format, which means each embedding dictionary is written as an individual JSON object on its own line.
 
-```
+```python
 import tempfile
 from pathlib import Path
 
@@ -254,7 +254,7 @@ print(f"Embeddings directory: {embeddings_file_path}")
 
 5.9 Write embeddings in batches to prevent out-of-memory errors. Notice we are only using 5000 questions so that the embedding creation process and indexing is faster. The dataset contains more than 50,000 questions. This step will take around 5 minutes.
 
-```
+```python
 
 import gc
 import json
@@ -320,21 +320,21 @@ for i, df in tqdm(
 
 6.1 Define a bucket where you will store your embeddings.
 
-```
+```python
 BUCKET_URI = f"gs://{PROJECT_ID}-unique"
 
 ```
 
 6.2 Create your Cloud Storage bucket.
 
-```
+```python
 ! gsutil mb -l {REGION} -p {PROJECT_ID} {BUCKET_URI}
 
 ```
 
 6.3 Upload the training data to a Google Cloud Storage bucket.
 
-```
+```python
 remote_folder = f"{BUCKET_URI}/{embeddings_file_path.stem}/"
 ! gsutil -m cp -r {embeddings_file_path}/* {remote_folder}
 
@@ -344,7 +344,7 @@ remote_folder = f"{BUCKET_URI}/{embeddings_file_path.stem}/"
 
 7.1 Setup your index name and description.
 
-```
+```python
 DISPLAY_NAME = "stack_overflow"
 DESCRIPTION = "question titles and bodies from stackoverflow"
 
@@ -353,7 +353,7 @@ DESCRIPTION = "question titles and bodies from stackoverflow"
 7.2 Create the index. Notice that the index reads the embeddings from the Cloud Storage bucket. The indexing process can take from 45 minutes up to 60 minutes. Wait for completion, and then proceed. You can open a different Google Cloud Console page, navigate to Vertex AI Vector search, and see how the index is being created.
 from google.cloud i
 
-```
+```python
 
 from google.cloud import aiplatform
 
@@ -376,7 +376,7 @@ tree_ah_index = aiplatform.MatchingEngineIndex.create_tree_ah_index(
 
 7.3 Reference the index name to make sure it got created successfully.
 
-```
+```python
 INDEX_RESOURCE_NAME = tree_ah_index.resource_name
 INDEX_RESOURCE_NAME
 
@@ -384,7 +384,7 @@ INDEX_RESOURCE_NAME
 
 7.4 Using the resource name, you can retrieve an existing MatchingEngineIndex.
 
-```
+```python
 
 tree_ah_index = aiplatform.MatchingEngineIndex(index_name=INDEX_RESOURCE_NAME)
 
@@ -392,7 +392,7 @@ tree_ah_index = aiplatform.MatchingEngineIndex(index_name=INDEX_RESOURCE_NAME)
 
 7.5 Create an IndexEndpoint so that it can be accessed via an API.
 
-```
+```python
 
 my_index_endpoint = aiplatform.MatchingEngineIndexEndpoint.create(
     display_name=DISPLAY_NAME,
@@ -404,7 +404,7 @@ my_index_endpoint = aiplatform.MatchingEngineIndexEndpoint.create(
 
 7.6 Deploy your index to the created endpoint. This can take up to 15 minutes.
 
-```
+```python
 
 DEPLOYED_INDEX_ID = "deployed_index_id_unique"
 
@@ -421,7 +421,7 @@ my_index_endpoint.deployed_indexes
 
 7.7 Verify number of declared items matches the number of embeddings. Each IndexEndpoint can have multiple indexes deployed to it. For each index, you can retrieve the number of deployed vectors using the index_endpoint._gca_resource.index_stats.vectors_count. The numbers may not match exactly due to potential rate-limiting failures incurred when using the embedding service.
 
-```
+```python
 number_of_vectors = sum(
     aiplatform.MatchingEngineIndex(
         deployed_index.index
@@ -441,7 +441,7 @@ Note: For the DOT_PRODUCT_DISTANCE distance type, the "distance" property return
 
 8.1 Create an embedding for a test question.
 
-```
+```python
 
 test_embeddings = encode_texts_to_embeddings(sentences=["Install GPU for Tensorflow"])
 
@@ -449,7 +449,7 @@ test_embeddings = encode_texts_to_embeddings(sentences=["Install GPU for Tensorf
 
 8.2 Test the query to retrieve the similar embeddings.
 
-```
+```python
 NUM_NEIGHBOURS = 10
 
 response = my_index_endpoint.find_neighbors(
@@ -464,7 +464,7 @@ response
 
 8.3 Verify that the retrieved results are relevant by checking the StackOverflow links.
 
-```
+```python
 for match_index, neighbor in enumerate(response[0]):
     print(f"https://stackoverflow.com/questions/{neighbor.id}")
 
