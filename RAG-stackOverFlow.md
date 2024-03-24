@@ -27,10 +27,9 @@ The JupyterLab will run in a new tab.
 On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new python notebook.
 
 
+### Task 3. Set up the Jupyter notebook environment
 
-### Task 3. Set up the Jupyter notebook environment```
-
-In the first cell, run the following command to install the Google Cloud Vertex AI, Cloud Storage and BigQuery SDKs. To run the command, execute SHIFT+ENTER
+3.1 In the first cell, run the following command to install the Google Cloud Vertex AI, Cloud Storage and BigQuery SDKs. To run the command, execute SHIFT+ENTER
 
 ```
 ! pip3 install --upgrade google-cloud-aiplatform \
@@ -38,21 +37,22 @@ In the first cell, run the following command to install the Google Cloud Vertex 
                         'google-cloud-bigquery[pandas]'
 ```
 
-Restart kernel after installs so that your environment can access the new packages
+3.2 Restart kernel after installs so that your environment can access the new packages
+
 ```
 import IPython
 
 app = IPython.Application.instance()
 app.kernel.do_shutdown(True)
 ```
-Setup the environment values for your project.
+3.3 Setup the environment values for your project.
 
 ```
 PROJECT = !gcloud config get-value project
 PROJECT_ID = PROJECT[0]
 REGION = "us-west1"
 ```
-Import and initialize the Vertex AI Python SDK.
+3.4 Import and initialize the Vertex AI Python SDK.
 
 ```
 import vertexai
