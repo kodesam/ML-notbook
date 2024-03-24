@@ -32,6 +32,36 @@ On the Launcher, under Notebook, click on Python 3 (ipykernel) to open a new pyt
 
 ```Task 3. Set up the Jupyter notebook environment```
 
+In the first cell, run the following command to install the Google Cloud Vertex AI, Cloud Storage and BigQuery SDKs. To run the command, execute SHIFT+ENTER
+
+```
+! pip3 install --upgrade google-cloud-aiplatform \
+                        google-cloud-storage \
+                        'google-cloud-bigquery[pandas]'
+```
+
+Restart kernel after installs so that your environment can access the new packages
+```
+import IPython
+
+app = IPython.Application.instance()
+app.kernel.do_shutdown(True)
+```
+Setup the environment values for your project.
+
+```
+PROJECT = !gcloud config get-value project
+PROJECT_ID = PROJECT[0]
+REGION = "us-west1"
+```
+Import and initialize the Vertex AI Python SDK.
+
+```
+import vertexai
+vertexai.init(project = PROJECT_ID,
+              location = REGION)
+```
+
 ```Task 4. Prepare the data in BigQuery```
 
 ```Task 5. Create text embeddings from BigQuery data```
