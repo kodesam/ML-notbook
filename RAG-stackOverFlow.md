@@ -3,9 +3,9 @@
 ***
 ## Setup and requirements
 
-###  1. Enable Vertex AI APIs
+### Task 1. Enable Vertex AI APIs
 
-1.1 Click on the nevigantion menu icon on the top left of the console.
+***1.1*** Click on the nevigantion menu icon on the top left of the console.
 
 1.2 Select APIs & services > Enable APIs and services, and click on + Enable APIs and services.
 
